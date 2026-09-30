@@ -1,0 +1,25 @@
+# nugetgo registry -- schema v1
+#
+# This file is the single source of truth for the registry. The site at https://nugetgo.net/ is
+# generated from it. go2cs is planned to read it from https://nugetgo.net/v1/mappings.txt.
+#
+# The data in this file is dedicated to the public domain under CC0-1.0.
+#
+# Format: one mapping per line, six fields separated by single TAB characters. Lines that start
+# with '#' are comments. Blank lines are ignored.
+#
+#   module-path   the Go module path exactly as in go.mod, including any /vN suffix
+#                 (one row per module major version)
+#   nuget-id      the published NuGet package ID of the go2cs conversion
+#   status        canonical | community | withdrawn
+#                   canonical  the package's repository metadata points to the same
+#                              code-hosting org as the module path
+#                   community  a third-party conversion; never auto-merged
+#                   withdrawn  retained for the record; readers treat it as unmapped
+#   source-repo   https URL of the repository holding the C# conversion
+#   registered    date the row was registered, YYYY-MM-DD
+#   contact       who to contact about the row, such as a GitHub handle
+#
+# Rows are sorted by module-path. See CONTRIBUTING.md for how rows are added and reviewed.
+#
+# module-path	nuget-id	status	source-repo	registered	contact
