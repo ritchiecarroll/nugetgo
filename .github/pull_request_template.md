@@ -16,7 +16,7 @@ a maintainer checks the rest by hand.
 - [ ] The row has six fields separated by single TAB characters, none empty and none padded with spaces.
 - [ ] The module path is exactly as in `go.mod`, including any `/vN` suffix, and has no other row.
 - [ ] No other row uses the NuGet package ID, compared case-insensitively.
-- [ ] The NuGet package ID is valid. A new publish follows the recommended ID convention in CONTRIBUTING.md.
+- [ ] The NuGet package ID is valid. It follows the ID pattern in CONTRIBUTING.md: `nugetgo.` followed by the dotted module path, or the hash-shortened alternate described there, whether the row is `canonical` or `community`. A module conversion does not take the `go.` prefix.
 - [ ] The source repository is an `https` URL and the date is `YYYY-MM-DD`.
 - [ ] The row is in sorted order by module path.
 - [ ] `go run ./cmd/sitegen` passes locally.

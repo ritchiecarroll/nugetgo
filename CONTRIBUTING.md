@@ -18,7 +18,7 @@ module-path	nuget-id	status	source-repo	registered	contact
 | Field | Content |
 |:--|:--|
 | `module-path` | The Go module path exactly as in `go.mod`, including any `/vN` suffix. |
-| `nuget-id` | The published NuGet package ID of the go2cs conversion. |
+| `nuget-id` | The published NuGet package ID of the go2cs conversion: `nugetgo.` followed by the dotted module path, or its hash-shortened alternate (see [NuGet package IDs](#nuget-package-ids)). |
 | `status` | `canonical`, `community` or `withdrawn`. |
 | `source-repo` | The `https` URL of the repository that holds the C# conversion. |
 | `registered` | The date the row was registered, `YYYY-MM-DD`. |
@@ -29,17 +29,26 @@ UTF-8 without a byte order mark, with LF line endings.
 
 ## NuGet package IDs
 
-The registry is the authority on which package a module maps to; an ID is not required to follow a
-naming scheme. New publishes should use this convention:
+The NuGet package ID of a converted Go module is `nugetgo.` followed by the dotted module path.
+This is the pattern for every go2cs conversion of a Go module, whoever publishes it, the module's
+own author included.
 
-- **Third-party conversions** use `nugetgo.` followed by the module path with every `/` replaced by
-  `.`, keeping every path segment. `github.com/example/widget/v2` becomes
+- **The ID** is `nugetgo.` followed by the module path with every `/` replaced by `.`, keeping
+  every path segment. `github.com/example/widget/v2` becomes
   `nugetgo.github.com.example.widget.v2`. The package display name keeps Go's letter case.
-- **Canonical publishers** (the module's own org) may use `go.` followed by the dotted module path.
-  That form is left free for them.
+- **A module conversion does not take the `go.` prefix.** go2cs uses that prefix for the converted
+  Go standard library (`go.fmt`, `go.net.http`) and for its own runtime and source-generator
+  packages.
+- **Status does not change the ID.** A `canonical` row (the conversion comes from the module's
+  own org, verified as the [trust policy](#trust-policy) describes) and a `community` row (it
+  comes from someone else) follow the same pattern. The prefix says nothing about where a
+  conversion comes from; a row's `canonical` or `community` status does.
 - When the natural ID fails nuget.org's package ID rule, collides case-insensitively with another
-  ID, collides because two paths dot to the same ID (`a/b.c` and `a.b/c`), or, under `go.`, would
-  equal a Go standard library package ID, a hash-shortened alternate ID is used instead.
+  ID, or collides because two paths dot to the same ID (`a/b.c` and `a.b/c`), a hash-shortened
+  alternate ID is used instead. The alternate keeps the `nugetgo.` prefix.
+
+The registry row is the authority on which package a module maps to: a reader of the file takes
+the ID from the row and does not derive it from the module path.
 
 ## Trust policy
 

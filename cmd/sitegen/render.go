@@ -23,6 +23,7 @@ var page = template.Must(template.New("index").Parse(`<!doctype html>
 <main>
 <h1>nugetgo</h1>
 <p>nugetgo maps Go module paths to the NuGet packages that hold their <a href="https://github.com/ritchiecarroll/go2cs">go2cs</a> C# conversions, so a converted program can reference a dependency as a package instead of converting it again. go2cs does not read the registry yet; that support is planned. This page is generated from the registry's data file, <a href="v1/mappings.txt">v1/mappings.txt</a>, which is the single source of truth.</p>
+<p>The NuGet package ID of a converted module is <code>nugetgo.</code> followed by its dotted module path, whoever publishes it, the module's own author included: <code>github.com/example/widget/v2</code> maps to <code>nugetgo.github.com.example.widget.v2</code>, or to a hash-shortened alternate when that ID cannot be used. A module conversion does not take the <code>go.</code> prefix, which go2cs uses for the converted Go standard library. A mapping's status, not its ID, says whether the conversion comes from the module's own org.</p>
 {{if .Rows}}
 <div class="controls" id="controls" hidden>
 <input id="filter" type="search" placeholder="Filter mappings" aria-label="Filter mappings" autocomplete="off" spellcheck="false">

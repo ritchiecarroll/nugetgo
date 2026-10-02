@@ -27,7 +27,11 @@ module-path	nuget-id	status	source-repo	registered	contact
 ```
 
 - `module-path`: the Go module path as in `go.mod`, including any `/vN` suffix; one row per major version.
-- `nuget-id`: the NuGet package ID of the conversion.
+- `nuget-id`: the NuGet package ID of the conversion, `nugetgo.` followed by the dotted module path
+  (`github.com/example/widget/v2` maps to `nugetgo.github.com.example.widget.v2`) or a
+  hash-shortened alternate when that ID cannot be used, whoever publishes it, the module's own
+  author included. A module conversion does not take the `go.` prefix, which go2cs uses for the
+  converted Go standard library.
 - `status`: `canonical` (the package's repository metadata points to the module's own org),
   `community` (a third-party conversion), or `withdrawn` (kept for the record, treated as unmapped).
 - `source-repo`, `registered`, `contact`: provenance for people.
@@ -38,7 +42,7 @@ version it was converted from.
 ## Contributing
 
 Mappings are added by pull request. [CONTRIBUTING.md](CONTRIBUTING.md) has the trust policy, the
-NuGet ID convention and the checks every row goes through.
+NuGet package ID pattern and the checks every row goes through.
 
 ## Non-goals
 

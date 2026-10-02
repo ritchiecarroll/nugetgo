@@ -11,6 +11,10 @@
 #   module-path   the Go module path exactly as in go.mod, including any /vN suffix
 #                 (one row per module major version)
 #   nuget-id      the published NuGet package ID of the go2cs conversion
+#                 ("nugetgo." followed by the dotted module path, or its hash-shortened
+#                 alternate, whoever publishes it; a module conversion does not take the
+#                 "go." prefix, which go2cs uses for the converted Go standard library);
+#                 read the ID from the row, do not derive it from the module path
 #   status        canonical | community | withdrawn
 #                   canonical  the package's repository metadata points to the same
 #                              code-hosting org as the module path
