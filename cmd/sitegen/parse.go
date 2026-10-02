@@ -34,6 +34,11 @@ var nugetIDRe = regexp.MustCompile(`^[A-Za-z0-9_]+([.-][A-Za-z0-9_]+)*$`)
 
 const maxNuGetIDLength = 100
 
+// stdlibIDPrefix starts the NuGet package IDs of the converted Go standard library (go.fmt,
+// go.net.http), so a row's ID never starts with it. NuGet IDs are case-insensitive, so it is
+// compared against the lowercase ID.
+const stdlibIDPrefix = "go."
+
 // majorSuffixRe matches a final module path element that Go rejects as a major version suffix:
 // /v0, /v1, or any /vN with a leading zero.
 var majorSuffixRe = regexp.MustCompile(`^v(0[0-9]*|1)$`)
@@ -135,6 +140,8 @@ func parseAt(name string, data []byte, now time.Time) ([]Row, error) {
 			fail(line, "nuget-id is %d characters, NuGet allows at most %d", len(row.NuGetID), maxNuGetIDLength)
 		} else if !nugetIDRe.MatchString(row.NuGetID) {
 			fail(line, "nuget-id %q is not a valid NuGet package ID", row.NuGetID)
+		} else if strings.HasPrefix(strings.ToLower(row.NuGetID), stdlibIDPrefix) {
+			fail(line, "nuget-id %q uses the %q prefix, which is the converted Go standard library; the ID of a converted module starts with \"nugetgo.\"", row.NuGetID, stdlibIDPrefix)
 		}
 		if !statuses[row.Status] {
 			fail(line, "status %q is not one of canonical, community, withdrawn", row.Status)

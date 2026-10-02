@@ -198,6 +198,82 @@ func TestAcceptedEdgeCases(t *testing.T) {
 	}
 }
 
+// rowWith is validRow with its NuGet ID and its status replaced.
+func rowWith(id, status string) string {
+	row := strings.Replace(validRow, "\tnugetgo.github.com.example.hashset\t", "\t"+id+"\t", 1)
+	return strings.Replace(row, "\tcommunity\t", "\t"+status+"\t", 1)
+}
+
+// TestNuGetIDGoPrefixRefused pins the one prefix rule the lint enforces: a NuGet ID that starts
+// with go., the prefix of the converted Go standard library, is refused by name in any letter case
+// and whatever the row's status. Every other valid NuGet ID is accepted, with or without the
+// nugetgo. prefix. A row yields one problem: an ID that is malformed or too long is refused for
+// that alone, even when it starts with go.
+func TestNuGetIDGoPrefixRefused(t *testing.T) {
+	goPrefix := func(id string) string {
+		return `nuget-id "` + id + `" uses the "go." prefix, which is the converted Go standard library; the ID of a converted module starts with "nugetgo."`
+	}
+	invalid := func(id string) string {
+		return `nuget-id "` + id + `" is not a valid NuGet package ID`
+	}
+	tooLong := func(string) string {
+		return "nuget-id is 101 characters, NuGet allows at most 100"
+	}
+	longest := "go." + strings.Repeat("a", maxNuGetIDLength-len("go."))
+	cases := []struct {
+		name string
+		id   string
+		want func(id string) string // the row's one problem; nil when the ID is accepted
+	}{
+		{"module path under nugetgo", "nugetgo.github.com.example.hashset", nil},
+		{"nugetgo in another letter case", "NuGetGo.github.com.example.hashset", nil},
+		{"hash-shortened alternate", "nugetgo.github.com.example.hashset.22485230", nil},
+		{"another prefix", "Example.HashSet", nil},
+		{"nugetgo without its dot", "nugetgo-x.y", nil},
+		{"starts with go but not with go.", "gopher.hashset", nil},
+		{"golang prefix", "golang.x", nil},
+		{"go and a hyphen", "go-x.y", nil},
+		{"the bare id go", "go", nil},
+		{"go. after the start", "example.go.hashset", nil},
+		{"module path under go", "go.github.com.example.hashset", goPrefix},
+		{"standard library id", "go.net.http", goPrefix},
+		{"go capitalised", "Go.X", goPrefix},
+		{"go in upper case", "GO.x", goPrefix},
+		{"go in mixed case", "gO.GitHub.com.example.hashset", goPrefix},
+		{"go. at the longest length", longest, goPrefix},
+		{"go. past the longest length", longest + "a", tooLong},
+		{"go. and nothing else", "go.", invalid},
+		{"go. and an empty segment", "go..x", invalid},
+		{"go. capitalised and a hyphen", "Go.-x", invalid},
+	}
+	for _, status := range []string{"canonical", "community", "withdrawn"} {
+		for _, c := range cases {
+			t.Run(status+"/"+c.name, func(t *testing.T) {
+				rows, err := Parse("m.txt", []byte(header+rowWith(c.id, status)))
+				if c.want == nil {
+					if err != nil {
+						t.Fatalf("nuget-id %q refused: %v", c.id, err)
+					}
+					if len(rows) != 1 || rows[0].NuGetID != c.id || rows[0].Status != status {
+						t.Fatalf("got rows %+v, want one %s row with nuget-id %q", rows, status, c.id)
+					}
+					return
+				}
+				var verr *ValidationError
+				if !errors.As(err, &verr) {
+					t.Fatalf("nuget-id %q accepted: got %v, want a *ValidationError", c.id, err)
+				}
+				if len(verr.Problems) != 1 {
+					t.Fatalf("got %d problems, want exactly one: %v", len(verr.Problems), err)
+				}
+				if want := "m.txt:2: " + c.want(c.id); verr.Problems[0] != want {
+					t.Errorf("got  %q\nwant %q", verr.Problems[0], want)
+				}
+			})
+		}
+	}
+}
+
 func TestInvalidFileWritesNothing(t *testing.T) {
 	dir := t.TempDir()
 	in := filepath.Join(dir, "mappings.txt")

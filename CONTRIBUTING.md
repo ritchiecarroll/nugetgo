@@ -86,10 +86,11 @@ file's history keeps the withdrawn row.
 Every pull request that adds or changes a row is validated in this order, cheapest first:
 
 1. **Schema lint.** Six TAB-separated fields, no empty or padded field, no control or invisible
-   characters, a module path that passes a basic syntax check, a valid NuGet package ID that no
-   other row uses (compared case-insensitively), a known status, an `https` source repository with
-   an ASCII host, a `YYYY-MM-DD` date that is not in the future, one row per module path, and rows
-   in sorted order.
+   characters, a module path that passes a basic syntax check, a valid NuGet package ID that does
+   not start with `go.` and that no other row uses (both compared case-insensitively), a known
+   status, an `https` source repository with an ASCII host, a `YYYY-MM-DD` date that is not in the
+   future, one row per module path, and rows in sorted order. The lint does not check that the ID
+   follows the `nugetgo.` pattern in [NuGet package IDs](#nuget-package-ids).
 2. **Existence.** The module resolves at `proxy.golang.org`, and the package ID resolves at
    nuget.org with at least one non-prerelease version. For a module whose only Go versions are
    prereleases or pseudo-versions, a prerelease package version is accepted when its description
