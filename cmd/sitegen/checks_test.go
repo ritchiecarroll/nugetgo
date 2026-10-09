@@ -594,7 +594,7 @@ func TestLatestVersion(t *testing.T) {
 		{[]PackageVersion{{Version: "1.0.0"}, {Version: "1.10.0"}, {Version: "1.9.0"}}, "1.10.0"},
 		{[]PackageVersion{{Version: "1.0.0"}, {Version: "2.0.0-rc.1"}}, "1.0.0"},
 		{[]PackageVersion{{Version: "1.0.0-rc.2"}, {Version: "1.0.0-rc.10"}, {Version: "1.0.0-beta"}}, "1.0.0-rc.10"},
-		{[]PackageVersion{{Version: "1.0.0.2"}, {Version: "1.0.0"}, {Version: "1.0.0.10"}}, "1.0.0.10"},
+		{[]PackageVersion{{Version: "1.300.300.302"}, {Version: "1.300.300"}, {Version: "1.300.300.310"}}, "1.300.300.310"},
 		{[]PackageVersion{{Version: "0.0.0-20251001235044-fca9a0999f15"}, {Version: "0.0.0-20251001235044-fca9a0999f15.0.1"}}, "0.0.0-20251001235044-fca9a0999f15.0.1"},
 		{[]PackageVersion{{Version: "1.0.0"}, {Version: "2.0.0", Listed: &no}}, "1.0.0"},
 	} {
