@@ -3,3 +3,4 @@
 # release per line; '#' starts a comment. A maintainer adds a release here when go2cs publishes it.
 1.24.13.3
 1.24.13.4
+1.24.13.5
