@@ -83,39 +83,69 @@ file's history keeps the withdrawn row.
 
 ## Checks
 
-Every pull request that adds or changes a row is validated in this order, cheapest first:
+These checks are your checklist before you open a pull request, and the `ci` workflow runs them on
+it. Check 1 covers the whole file; checks 2 to 4 run on the rows your pull request adds or changes,
+in this order, cheapest first, and stop at a row's first failing check. A `withdrawn` row is linted
+only: checks 2 to 4 do not run on it. Each result appears on the pull request as an annotation on
+the row's line.
 
 1. **Schema lint.** Six TAB-separated fields, no empty or padded field, no control or invisible
    characters, a module path that passes a basic syntax check, a valid NuGet package ID that does
    not start with `go.` and that no other row uses (both compared case-insensitively), a known
    status, an `https` source repository with an ASCII host, a `YYYY-MM-DD` date that is not in the
-   future, one row per module path, and rows in sorted order. The lint does not check that the ID
-   follows the `nugetgo.` pattern in [NuGet package IDs](#nuget-package-ids).
+   future, one row per module path, and rows in sorted order. The lint does not require the
+   `nugetgo.` pattern in [NuGet package IDs](#nuget-package-ids): an ID that is neither the
+   module's natural `nugetgo.` ID nor its hash-shortened alternate draws a warning on its row,
+   never a failure.
 2. **Existence.** The module resolves at `proxy.golang.org`, and the package ID resolves at
-   nuget.org with at least one non-prerelease version. For a module whose only Go versions are
-   prereleases or pseudo-versions, a prerelease package version is accepted when its description
-   carries the PROOF text and the Go module version exists at `proxy.golang.org`.
-3. **Provenance.** The canonical rule above, evaluated from the package's registration metadata.
-   The result confirms or contradicts the row's claimed status.
-4. **Surface.** The package's latest version carries a go2cs self-description that names the
-   claimed module path and a real module version, was produced by a go2cs release the current
-   toolchain recognizes, and matches the exported surface of a fresh go2cs conversion of that
-   module version.
+   nuget.org with at least one listed non-prerelease version. For a module whose only Go versions
+   are prereleases or pseudo-versions, a prerelease package version is accepted when its
+   description carries the PROOF text and the Go module version exists at `proxy.golang.org`: the
+   description opens `PROOF: unofficial go2cs C# conversion of <module> <version>, ` (or, from the
+   module's author, `PROOF: go2cs C# conversion of <module> <version>, `), naming the row's module
+   and a version the proxy resolves.
+3. **Provenance.** The canonical rule above, evaluated from the `RepositoryUrl` (the nuspec's
+   `repository` URL) of the package's latest version: for a module path on `github.com`,
+   `gitlab.com` or `bitbucket.org`, an `https` URL on the same host under the same org, compared
+   case-insensitively. A row that claims `canonical` fails when the rule does not confirm it. A
+   `community` row is reported, never failed. A module path on any other host, such as `gopkg.in`
+   or a vanity domain, names no org the rule can compare, so its row is not canonical by
+   validation; a maintainer reviews it. The check does not read nuget.org's verified repository; a
+   maintainer confirms a canonical claim that rests on it.
+4. **Surface.** The package's latest version (the highest listed release, or the highest listed
+   prerelease when it has no release) carries a go2cs self-description, `go2cs/source-metadata.txt`
+   in the `.nupkg`, that is well formed and:
+   - (a) names the claimed module path and a real module version, one that resolves at
+     `proxy.golang.org`;
+   - (b) was produced by a go2cs release this check recognizes, one listed in
+     [`cmd/sitegen/go2cs-releases.txt`](cmd/sitegen/go2cs-releases.txt), which a maintainer
+     updates when go2cs publishes a release;
+   - (c) matches the exported surface of a fresh go2cs conversion of that module version. A
+     maintainer runs this part: it needs the go2cs converter and a conversion of the module, which
+     the registry's CI does not install or run.
+5. **Label.** When check 1 passes, checks 2 to 4 pass on every added or changed row, every such row
+   claims `canonical` and check 3 confirms it, and the pull request changes no file but
+   `v1/mappings.txt`, the pull request gets the `auto-merge-eligible` label. A pull request that
+   stops qualifying loses it. The label merges nothing.
 
-**What is automated today.** Only step 1. The `ci` workflow runs `go run ./cmd/sitegen`, which
-validates every row and fails with the line number of each problem. You can run the same command
-locally before opening a pull request. Steps 2 to 4 are checked by hand by a maintainer until the
-registry's validation CI lands.
+Run the checks locally before opening a pull request:
+
+```
+go run ./cmd/sitegen
+git show origin/main:v1/mappings.txt > base-mappings.txt
+go run ./cmd/sitegen -check base-mappings.txt
+```
+
+The first command is check 1. The last runs checks 2 to 4 on the rows your file adds or changes
+against `base-mappings.txt`, and reads `proxy.golang.org` and nuget.org.
 
 ## Merging
 
-The merge policy is the checks above and nothing else. A pull request is merged automatically only
-when every check passes **and** the row is canonical by validation. A contributor's claim of
-`canonical` never merges a row on its own. Every other pull request waits for a maintainer, with
-the check results on the pull request.
-
-Until the validation CI lands, nothing merges automatically: a maintainer runs steps 2 to 4 and
-merges by hand.
+The merge policy is the checks above and nothing else. Nothing merges automatically: a maintainer
+merges every pull request. A pull request labelled `auto-merge-eligible` passed every automated
+check with every added or changed row canonical by validation; a maintainer runs check 4(c) and
+merges it. A contributor's claim of `canonical` never earns the label on its own. Every other pull
+request waits for a maintainer's review, with the check results on the pull request.
 
 ## Changing the site generator
 

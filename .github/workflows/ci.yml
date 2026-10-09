@@ -36,3 +36,63 @@ jobs:
 
       - name: Schema lint and site build
         run: go run ./cmd/sitegen -in v1/mappings.txt -out _site
+
+  # Checks 2 to 4 on the rows this pull request adds or changes. A pull request that changes no row
+  # makes no network request.
+  checks:
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      eligible: ${{ steps.checks.outputs.eligible }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version: stable
+          cache: false
+
+      # The checkout is the pull request's merge commit; its first parent is the base it merges into.
+      - name: Base file and changed paths
+        run: |
+          if git cat-file -e HEAD^1:v1/mappings.txt 2>/dev/null; then
+            git show HEAD^1:v1/mappings.txt > "$RUNNER_TEMP/base-mappings.txt"
+          else
+            : > "$RUNNER_TEMP/base-mappings.txt"
+          fi
+          git diff --name-only HEAD^1 HEAD > "$RUNNER_TEMP/changed-files.txt"
+
+      - name: Existence, provenance and surface checks
+        id: checks
+        run: go run ./cmd/sitegen -check "$RUNNER_TEMP/base-mappings.txt" -in v1/mappings.txt -changed-files "$RUNNER_TEMP/changed-files.txt"
+
+  # Check 5 labels and never merges. The token can write labels only for a pull request from a branch
+  # of this repository, so the job is skipped for a fork's; the checks job states the decision either way.
+  label:
+    needs: [lint, checks]
+    if: always() && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Set or clear auto-merge-eligible
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          ELIGIBLE: ${{ needs.lint.result == 'success' && needs.checks.result == 'success' && needs.checks.outputs.eligible == 'true' }}
+        run: |
+          if [ "$ELIGIBLE" = "true" ]; then
+            gh api --method POST "repos/$REPO/issues/$PR/labels" -f "labels[]=auto-merge-eligible" > /dev/null
+            echo "auto-merge-eligible: label set"
+          elif gh api "repos/$REPO/issues/$PR/labels" --jq '.[].name' | grep -qx auto-merge-eligible; then
+            gh api --method DELETE "repos/$REPO/issues/$PR/labels/auto-merge-eligible" > /dev/null
+            echo "auto-merge-eligible: label cleared"
+          else
+            echo "auto-merge-eligible: not eligible, no label"
+          fi

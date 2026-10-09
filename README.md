@@ -44,6 +44,12 @@ version it was converted from.
 Mappings are added by pull request. [CONTRIBUTING.md](CONTRIBUTING.md) has the trust policy, the
 NuGet package ID pattern and the checks every row goes through.
 
+CI lints the whole file on every pull request. For each row a pull request adds or changes, it
+verifies that the module resolves at `proxy.golang.org`, that the package resolves at nuget.org,
+that the package's repository metadata confirms or contradicts the row's claimed status, and that
+the package's go2cs self-description names the module, a real module version and a known go2cs
+release. Nothing merges automatically; a maintainer merges every pull request.
+
 ## Non-goals
 
 nugetgo is not a package host (nuget.org hosts the packages) and not a build service. It maps
