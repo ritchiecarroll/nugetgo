@@ -1,7 +1,7 @@
 # nugetgo registry -- schema v1
 #
 # This file is the single source of truth for the registry. The site at https://nugetgo.net/ is
-# generated from it. go2cs is planned to read it from https://nugetgo.net/v1/mappings.txt.
+# generated from it. go2cs reads it from https://nugetgo.net/v1/mappings.txt.
 #
 # The data in this file is dedicated to the public domain under CC0-1.0.
 #
