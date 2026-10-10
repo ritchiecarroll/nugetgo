@@ -76,7 +76,7 @@ module's repository or in the issue, is final.
 
 **Withdrawn rows are kept.** A row can be withdrawn by setting its status to `withdrawn`, for
 example when its package is found to be wrong or unsafe. The row stays in the file as the record.
-Readers of the file, including go2cs once it reads the registry, treat a withdrawn row as unmapped.
+Readers of the file, go2cs included, treat a withdrawn row as unmapped.
 A withdrawn row still holds its module path: a new mapping for that module replaces the withdrawn
 row in place, through a pull request reviewed like any other that links the withdrawal, and the
 file's history keeps the withdrawn row.
