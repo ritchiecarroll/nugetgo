@@ -27,3 +27,4 @@
 # Rows are sorted by module-path. See CONTRIBUTING.md for how rows are added and reviewed.
 #
 # module-path	nuget-id	status	source-repo	registered	contact
+github.com/ritchiecarroll/hashset	nugetgo.github.com.ritchiecarroll.hashset	canonical	https://github.com/ritchiecarroll/hashset-cs	2026-10-09	ritchiecarroll
