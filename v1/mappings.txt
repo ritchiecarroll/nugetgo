@@ -27,5 +27,6 @@
 # Rows are sorted by module-path. See CONTRIBUTING.md for how rows are added and reviewed.
 #
 # module-path	nuget-id	status	source-repo	registered	contact
+github.com/golang-jwt/jwt/v5	nugetgo.github.com.golang-jwt.jwt.v5	community	https://github.com/ritchiecarroll/jwt-cs	2026-10-10	ritchiecarroll
 github.com/google/uuid	nugetgo.github.com.google.uuid	community	https://github.com/ritchiecarroll/uuid-cs	2026-10-10	ritchiecarroll
 github.com/ritchiecarroll/hashset	nugetgo.github.com.ritchiecarroll.hashset	canonical	https://github.com/ritchiecarroll/hashset-cs	2026-10-09	ritchiecarroll
