@@ -29,6 +29,8 @@
 # module-path	nuget-id	status	source-repo	registered	contact
 github.com/golang-jwt/jwt/v5	nugetgo.github.com.golang-jwt.jwt.v5	community	https://github.com/ritchiecarroll/jwt-cs	2026-10-10	ritchiecarroll
 github.com/google/uuid	nugetgo.github.com.google.uuid	community	https://github.com/ritchiecarroll/uuid-cs	2026-10-10	ritchiecarroll
+github.com/inconshreveable/mousetrap	nugetgo.github.com.inconshreveable.mousetrap	community	https://github.com/ritchiecarroll/mousetrap-cs	2026-10-26	ritchiecarroll
 github.com/ritchiecarroll/hashset	nugetgo.github.com.ritchiecarroll.hashset	canonical	https://github.com/ritchiecarroll/hashset-cs	2026-10-09	ritchiecarroll
+github.com/spf13/cobra	nugetgo.github.com.spf13.cobra	community	https://github.com/ritchiecarroll/cobra-cs	2026-10-26	ritchiecarroll
 github.com/spf13/pflag	nugetgo.github.com.spf13.pflag	community	https://github.com/ritchiecarroll/pflag-cs	2026-10-14	ritchiecarroll
 golang.org/x/sync	nugetgo.golang.org.x.sync	community	https://github.com/ritchiecarroll/sync-cs	2026-10-14	ritchiecarroll
