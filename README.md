@@ -1,6 +1,6 @@
 # <a href="https://go2cs.net"><img src="https://go2cs.net/images/go2cs-small.png" height="35" align="absmiddle" alt="go2cs logo"></a> nugetgo
 
-> Official [go2cs](https://go2cs.net) Go module to NuGet package registry: [nugetgo.net](https://nugetgo.net/)
+> Repo for the official [go2cs](https://go2cs.net) Go module to NuGet package registry: [nugetgo.net](https://nugetgo.net/)
 
 nugetgo is a registry that maps Go module paths to the NuGet package IDs of their [go2cs](https://go2cs.net) C# conversions.
 
