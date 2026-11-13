@@ -15,13 +15,13 @@ var page = template.Must(template.New("index").Parse(`<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src '{{.ScriptHash}}'; style-src '{{.StyleHash}}'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src '{{.ScriptHash}}'; style-src '{{.StyleHash}}'; img-src https://go2cs.net; base-uri 'none'; form-action 'none'">
 <title>nugetgo: Go module to NuGet package registry</title>
 <style>{{.Style}}</style>
 </head>
 <body>
 <main>
-<h1>nugetgo</h1>
+<h1><a href="https://go2cs.net"><img src="https://go2cs.net/images/go2cs-small.png" height="35" align="absmiddle" alt="go2cs logo"></a> nugetgo</h1>
 <p>nugetgo maps Go module paths to the NuGet packages that hold their <a href="https://github.com/ritchiecarroll/go2cs">go2cs</a> C# conversions, so a converted program can reference a dependency as a package instead of converting it again. go2cs reads this registry when it converts with <code>-recurse=nuget</code>: a dependency listed here becomes a reference to its package instead of a fresh conversion. This page is generated from the registry's data file, <a href="v1/mappings.txt">v1/mappings.txt</a>, which is the single source of truth.</p>
 <p>The NuGet package ID of a converted module is <code>nugetgo.</code> followed by its dotted module path, whoever publishes it, the module's own author included: <code>github.com/example/widget/v2</code> maps to <code>nugetgo.github.com.example.widget.v2</code>, or to a hash-shortened alternate when that ID cannot be used. A module conversion does not take the <code>go.</code> prefix, which go2cs uses for the converted Go standard library. A mapping's status, not its ID, says whether the conversion comes from the module's own org.</p>
 {{if .Rows}}
@@ -99,6 +99,7 @@ body {
 }
 main { max-width: 72rem; margin: 0 auto; padding: 2rem 1rem; }
 h1 { margin: 0 0 1rem; font-size: 2rem; }
+h1 img { vertical-align: middle; }
 a { color: var(--link); }
 .controls { margin: 1.5rem 0 0.5rem; }
 #filter {
