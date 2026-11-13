@@ -1,6 +1,6 @@
-# nugetgo
+# <a href="https://go2cs.net"><img src="https://go2cs.net/images/go2cs-small.png" height="35" align="absmiddle" alt="go2cs logo"></a> nugetgo
 
-### <a href="https://go2cs.net"><img src="https://go2cs.net/images/go2cs-small.png" height="20" align="absmiddle" alt="go2cs logo"></a>&nbsp; Official [go2cs](https://go2cs.net) mapped Go module to NuGet package registry 
+> Official [go2cs](https://go2cs.net) Go module to NuGet package registry: [nugetgo.net](https://nugetgo.net/)
 
 nugetgo is a registry that maps Go module paths to the NuGet package IDs of their [go2cs](https://go2cs.net) C# conversions.
 
@@ -15,11 +15,7 @@ https://nugetgo.net/v1/mappings.txt
 The site at [nugetgo.net](https://nugetgo.net/) is generated from that file and lists its mappings.
 The file is the single source of truth.
 
-## Status
-
-The current mappings are listed at [nugetgo.net](https://nugetgo.net/).
-
-Published [NuGet packages with nugetgo prefix](https://www.nuget.org/packages?q=nugetgo).
+Browse published [NuGet packages](https://www.nuget.org/packages?q=nugetgo)  with `nugetgo.*` prefix.
 
 ## Schema v1
 
