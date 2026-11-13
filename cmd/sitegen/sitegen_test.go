@@ -324,6 +324,7 @@ func TestContentSecurityPolicyMatches(t *testing.T) {
 		"default-src 'none'",
 		"script-src '" + cspHash(inline("script")) + "'",
 		"style-src '" + cspHash(inline("style")) + "'",
+		"img-src https://go2cs.net",
 	} {
 		if !strings.Contains(policy, want) {
 			t.Errorf("policy %q lacks %q", policy, want)
