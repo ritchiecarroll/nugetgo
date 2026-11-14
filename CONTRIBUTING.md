@@ -1,11 +1,8 @@
 # Contributing to nugetgo
 
-nugetgo is one data file, [`v1/mappings.txt`](v1/mappings.txt). A mapping is added, changed or
-withdrawn by a pull request that edits that file. This page is the registry's policy. It is stated
-here before any conflict exists, so that conflicts are settled by rules written in advance.
+nugetgo is one data file, [`v1/mappings.txt`](v1/mappings.txt). A mapping is added, changed or withdrawn by a pull request that edits that file. This page is the registry's policy. It is stated here before any conflict exists, so that conflicts are settled by rules written in advance.
 
-By contributing you dedicate your contribution to the public domain under
-[CC0-1.0](LICENSE), the license of the whole repository.
+By contributing you dedicate your contribution, the new mapping record (not your Go or C# source code), to the public domain under [CC0-1.0](LICENSE), the license of the whole repository.
 
 ## The row format
 
