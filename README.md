@@ -4,7 +4,7 @@
 
 nugetgo is a registry that maps Go module paths to the NuGet package IDs of their [go2cs](https://go2cs.net) C# conversions.
 
-go2cs transpiles Go to C#; with a mapping, a converted program can reference a dependency as a published NuGet package instead of converting it again. `go2cs -recurse=nuget` consults the registry by default; see [Mapping modules to NuGet packages](https://go2cs.net/ConvertingAModule.html#mapping-modules-to-nuget-packages) in the go2cs README.
+go2cs transpiles Go to C#; with a mapping, a converted program can reference a dependency as a published NuGet package instead of converting it again. `go2cs -recurse=nuget` consults the registry by default; see [Mapping modules to NuGet packages](https://go2cs.net/ConvertingAModule.html#mapping-modules-to-nuget-packages) in the go2cs documentation.
 
 The registry is one plain text file, served at:
 
@@ -15,7 +15,7 @@ https://nugetgo.net/v1/mappings.txt
 The site at [nugetgo.net](https://nugetgo.net/) is generated from that file and lists its mappings.
 The file is the single source of truth.
 
-Browse published [NuGet packages](https://www.nuget.org/packages?q=nugetgo)  with `nugetgo.*` prefix.
+Browse the published `nugetgo.*` [NuGet packages](https://www.nuget.org/packages?q=nugetgo).
 
 ## Schema v1
 
