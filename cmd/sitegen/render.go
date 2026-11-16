@@ -17,6 +17,7 @@ var page = template.Must(template.New("index").Parse(`<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src '{{.ScriptHash}}'; style-src '{{.StyleHash}}'; img-src https://go2cs.net; base-uri 'none'; form-action 'none'">
 <title>nugetgo: Go module to NuGet package registry</title>
+<link rel="icon" href="https://go2cs.net/images/go2cs.ico" type="image/x-icon">
 <style>{{.Style}}</style>
 </head>
 <body>
