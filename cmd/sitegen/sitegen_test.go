@@ -330,6 +330,10 @@ func TestContentSecurityPolicyMatches(t *testing.T) {
 			t.Errorf("policy %q lacks %q", policy, want)
 		}
 	}
+	// The tab icon is go2cs.net's own, the same file the go2cs.net site uses; img-src above admits it.
+	if !strings.Contains(index, `<link rel="icon" href="https://go2cs.net/images/go2cs.ico" type="image/x-icon">`) {
+		t.Error("page lacks the go2cs.net tab icon")
+	}
 	if strings.Contains(index, "http://") || regexp.MustCompile(`(src|href)="https?://[^"]*\.(js|css)`).MatchString(index) {
 		t.Error("page references an external resource")
 	}
